@@ -1,4 +1,4 @@
-import {View,Text,TextInput, StyleSheet, Image,TouchableOpacity} from 'react-native';
+import {View,Text,TextInput, StyleSheet, Image,TouchableOpacity, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import imagen from './assets/image.png'
 import { useEffect, useState } from 'react';
@@ -27,15 +27,14 @@ const [mensaje, setMensaje] = useState('');
         <Text style={styles.title}>Iniciar Sesión</Text>
 
         <TextInput style={styles.input} placeholder="Usuario o correo" value={nombre} onChangeText={setNombre}/>
-
-        <TextInput style={styles.input} placeholder="Contraseña"  value={contrasenia} onChangeText={setContrasenia}secureTextEntry />
+        <TextInput style={styles.input} placeholder="Contraseña" value={contrasenia} onChangeText={setContrasenia} secureTextEntry={true} />
         <Text style={styles.texto}>{mensaje}</Text>
 </View>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Ingresar</Text>
         </TouchableOpacity>
-        <Text style={styles.texto}>Olvidaste la contraseña?</Text>
-        <Text style={styles.texto}>Crear cuenta</Text>
+        <Pressable style={({pressed}) => [{backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white'}]}><Text style={styles.texto}>Olvidaste la contraseña?</Text></Pressable>
+        <Pressable style={({pressed}) => [{backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white'}]}><Text style={styles.texto}>Crear cuenta</Text></Pressable>
 
       </View>
   );
@@ -101,5 +100,5 @@ const [mensaje, setMensaje] = useState('');
      fontSize: 15,
     textAlign: 'center',
     marginBottom: 15,
-  },
+  }
 });
