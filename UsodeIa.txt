@@ -1,0 +1,2 @@
+La ia se uso para hacer mas similar la parte de la stylesheet al ejemplo de la consigna.
+ Y luego y principalmente se uso para resolver el uso para la segunda parte del tp. 

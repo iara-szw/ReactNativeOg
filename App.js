@@ -1,29 +1,40 @@
-import React from 'react';
 import {View,Text,TextInput, StyleSheet, Image,TouchableOpacity} from 'react-native';
-import { SafeAreaView } from 'react-native-web';
-import image from './assets/image.png'
+import {SafeAreaView} from 'react-native-safe-area-context';
+import imagen from './assets/image.png'
+import { useEffect, useState } from 'react';
 
 export default function App() {
+
+  const [nombre,setNombre]=useState('')
+  const [contrasenia,setContrasenia]=useState('')
+const [mensaje, setMensaje] = useState('');
+  const handleLogin = () => {
+    // Aquí puedes agregar la lógica de autenticación, como verificar el nombre de usuario y la contraseña [LA ia me recomendo esto solo]
+    if (nombre === 'admin' && contrasenia === '123456') {
+      setMensaje('Inicio de sesión exitoso');
+    } else {
+      setMensaje('Nombre de usuario o contraseña incorrectos, vuelva a intentarlo');
+    }
+  };
   return (
     
     <View style={styles.general}>
-    <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <Text style={styles.title}>Login App (Lopez,Szwarstein)</Text>
       </SafeAreaView>
-    </View>
     <View style={styles.form}>
-        <Image style={styles.imagen} source={image}></Image>
+        <Image style={styles.imagen} source={imagen}></Image>
         <Text style={styles.title}>Iniciar Sesión</Text>
 
-        <TextInput style={styles.input} placeholder="Usuario o correo" />
+        <TextInput style={styles.input} placeholder="Usuario o correo" value={nombre} onChangeText={setNombre}/>
 
-        <TextInput style={styles.input} placeholder="Contraseña" secureTextEntry />
+        <TextInput style={styles.input} placeholder="Contraseña"  value={contrasenia} onChangeText={setContrasenia}secureTextEntry />
+        <Text style={styles.texto}>{mensaje}</Text>
 </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Ingresar</Text>
         </TouchableOpacity>
-                <Text style={styles.texto}>Olvidaste la contraseña?</Text>
+        <Text style={styles.texto}>Olvidaste la contraseña?</Text>
         <Text style={styles.texto}>Crear cuenta</Text>
 
       </View>
@@ -35,14 +46,9 @@ export default function App() {
     flex: 1,
     backgroundColor: '#ffffff',
   },
-
-  container: {
-    backgroundColor: '#ffe122',
-    padding: 15,
-  },
-
   safeArea: {
-    padding: 5,
+    backgroundColor: '#ffe122',
+    padding: 15
   },
 
   form: {
