@@ -1,23 +1,52 @@
 import {View,Text,TextInput, StyleSheet, Image,TouchableOpacity, Pressable} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SafeAreaView,SafeAreaProvider} from 'react-native-safe-area-context';
 import imagen from './assets/image.png'
 import { useEffect, useState } from 'react';
-
 export default function App() {
 
-  const [nombre,setNombre]=useState('')
-  const [contrasenia,setContrasenia]=useState('')
-const [mensaje, setMensaje] = useState('');
-  const handleLogin = () => {
-    // Aquí puedes agregar la lógica de autenticación, como verificar el nombre de usuario y la contraseña [LA ia me recomendo esto solo]
-    if (nombre === 'admin' && contrasenia === '123456') {
-      setMensaje('Inicio de sesión exitoso');
-    } else {
-      setMensaje('Nombre de usuario o contraseña incorrectos, vuelva a intentarlo');
+  const [nombre, setNombre] = useState('');
+  const [contrasenia, setContrasenia] = useState('');
+  const [mensaje, setMensaje] = useState('');
+
+  const handleLogin = async () => {
+
+    try {
+
+      const response = await fetch("http://10.0.2.2:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: nombre,
+          password: contrasenia
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+
+        await AsyncStorage.setItem("token", data.token);
+
+        setMensaje("Inicio de sesión exitoso");
+
+      } else {
+
+        setMensaje(data.message);
+
+      }
+
+    } catch (error) {
+
+      setMensaje("Error al conectar con el servidor");
+
     }
+
   };
   return (
-    
+    <SafeAreaProvider>
     <View style={styles.general}>
       <SafeAreaView style={styles.safeArea}>
         <Text style={styles.title}>Login App (Lopez,Szwarstein)</Text>
@@ -37,9 +66,9 @@ const [mensaje, setMensaje] = useState('');
         <Pressable style={({pressed}) => [{backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white'}]}><Text style={styles.texto}>Crear cuenta</Text></Pressable>
 
       </View>
+      </SafeAreaProvider>
   );
 }
-
  const styles = StyleSheet.create({
   general: {
     flex: 1,
