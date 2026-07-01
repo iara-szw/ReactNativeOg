@@ -75,6 +75,6 @@ app.get('/protected', verifyToken, (req, res) => {
 
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Servidor iniciado en http://localhost:${port}`);
 });
