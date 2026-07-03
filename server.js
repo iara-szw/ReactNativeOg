@@ -28,7 +28,7 @@ app.post('/login', (req, res) => {
 
         return res.json({
             message: 'Login exitoso',
-            token
+            token: token
         });
 
     }

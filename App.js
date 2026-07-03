@@ -1,31 +1,41 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput,Image, StyleSheet,Pressable, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useState } from 'react';
+import imagen from './assets/image.png'
+
 
 export default function App() {
+  const port = 3000; 
   const [nombre, setNombre] = useState('');
   const [contrasenia, setContrasenia] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const [logeado,setLogeado]=useState(false)
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const payload = { username: nombre, password: contrasenia };
+      let response = null;
+      let data = null;
+
+      response = await fetch(`http://localhost:${port}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: nombre, password: contrasenia }),
+        body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      data = await response.json();
 
       if (response.ok) {
         await AsyncStorage.setItem('token', data.token);
         setMensaje('Login correcto');
+        setLogeado(true)
       } else {
         setMensaje(data.message || 'Error');
+        setLogeado(false)
       }
     } catch (error) {
-      setMensaje('No se pudo conectar');
+      setMensaje('No se pudo conectar'+error);
     }
   };
 
@@ -42,7 +52,7 @@ export default function App() {
           <TextInput style={styles.input} placeholder="Usuario o correo" value={nombre} onChangeText={setNombre} />
           <TextInput style={styles.input} placeholder="Contraseña" value={contrasenia} onChangeText={setContrasenia} secureTextEntry />
           <Text style={styles.texto}>{mensaje}</Text>
-          {isLoggedIn ? <Text style={styles.successText}>Sesión activa con JWT</Text> : null}
+          {logeado ? <Text style={styles.successText}>Sesión activa con JWT</Text> : null}
         </View>
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Ingresar</Text>
